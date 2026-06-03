@@ -1,0 +1,1570 @@
+basePath: /
+definitions:
+  dto.ContactRequest:
+    properties:
+      email:
+        type: string
+      message:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+    required:
+    - email
+    - message
+    - name
+    - phone
+    type: object
+  dto.CreateAboutSectionRequest:
+    properties:
+      content: {}
+      description:
+        type: string
+      image:
+        type: string
+      is_active:
+        type: boolean
+      section_key:
+        type: string
+      sort_order:
+        type: integer
+      subtitle:
+        type: string
+      title:
+        type: string
+    required:
+    - section_key
+    type: object
+  dto.CreateFAQRequest:
+    properties:
+      answer:
+        type: string
+      category:
+        type: string
+      is_active:
+        type: boolean
+      question:
+        type: string
+      sort_order:
+        type: integer
+    required:
+    - answer
+    - question
+    type: object
+  dto.CreateHomepageSectionRequest:
+    properties:
+      content: {}
+      description:
+        type: string
+      image:
+        type: string
+      is_active:
+        type: boolean
+      section_key:
+        type: string
+      sort_order:
+        type: integer
+      subtitle:
+        type: string
+      title:
+        type: string
+    required:
+    - section_key
+    type: object
+  dto.CreateSEOPageRequest:
+    properties:
+      canonical_url:
+        type: string
+      meta_description:
+        type: string
+      meta_keywords:
+        type: string
+      meta_title:
+        type: string
+      og_description:
+        type: string
+      og_image:
+        type: string
+      og_title:
+        type: string
+      page_slug:
+        type: string
+    required:
+    - page_slug
+    type: object
+  dto.CreateServiceRequest:
+    properties:
+      description:
+        type: string
+      icon:
+        type: string
+      image:
+        type: string
+      is_active:
+        type: boolean
+      slug:
+        type: string
+      sort_order:
+        type: integer
+      title:
+        type: string
+    required:
+    - description
+    - title
+    type: object
+  dto.CreateTestimonialRequest:
+    properties:
+      company:
+        type: string
+      content:
+        type: string
+      designation:
+        type: string
+      image:
+        type: string
+      is_active:
+        type: boolean
+      name:
+        type: string
+      rating:
+        type: integer
+      sort_order:
+        type: integer
+    required:
+    - content
+    - name
+    type: object
+  dto.LoanInquiryRequest:
+    properties:
+      city:
+        type: string
+      email:
+        type: string
+      full_name:
+        type: string
+      monthly_income:
+        type: string
+      phone:
+        type: string
+      service:
+        type: string
+    required:
+    - city
+    - email
+    - full_name
+    - monthly_income
+    - phone
+    - service
+    type: object
+  dto.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        minLength: 6
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  dto.LoginResponse:
+    properties:
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/dto.UserInfo'
+    type: object
+  dto.UpdateAboutSectionRequest:
+    properties:
+      content: {}
+      description:
+        type: string
+      image:
+        type: string
+      is_active:
+        type: boolean
+      section_key:
+        type: string
+      sort_order:
+        type: integer
+      subtitle:
+        type: string
+      title:
+        type: string
+    type: object
+  dto.UpdateFAQRequest:
+    properties:
+      answer:
+        type: string
+      category:
+        type: string
+      is_active:
+        type: boolean
+      question:
+        type: string
+      sort_order:
+        type: integer
+    type: object
+  dto.UpdateHomepageSectionRequest:
+    properties:
+      content: {}
+      description:
+        type: string
+      image:
+        type: string
+      is_active:
+        type: boolean
+      section_key:
+        type: string
+      sort_order:
+        type: integer
+      subtitle:
+        type: string
+      title:
+        type: string
+    type: object
+  dto.UpdateInquiryStatusRequest:
+    properties:
+      status:
+        type: string
+    required:
+    - status
+    type: object
+  dto.UpdateSEOPageRequest:
+    properties:
+      canonical_url:
+        type: string
+      meta_description:
+        type: string
+      meta_keywords:
+        type: string
+      meta_title:
+        type: string
+      og_description:
+        type: string
+      og_image:
+        type: string
+      og_title:
+        type: string
+      page_slug:
+        type: string
+    type: object
+  dto.UpdateServiceRequest:
+    properties:
+      description:
+        type: string
+      icon:
+        type: string
+      image:
+        type: string
+      is_active:
+        type: boolean
+      slug:
+        type: string
+      sort_order:
+        type: integer
+      title:
+        type: string
+    type: object
+  dto.UpdateTestimonialRequest:
+    properties:
+      company:
+        type: string
+      content:
+        type: string
+      designation:
+        type: string
+      image:
+        type: string
+      is_active:
+        type: boolean
+      name:
+        type: string
+      rating:
+        type: integer
+      sort_order:
+        type: integer
+    type: object
+  dto.UserInfo:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      role:
+        type: string
+    type: object
+  models.AboutSection:
+    properties:
+      content: {}
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      image:
+        type: string
+      is_active:
+        type: boolean
+      section_key:
+        type: string
+      sort_order:
+        type: integer
+      subtitle:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.ContactInquiry:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      message:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.FAQ:
+    properties:
+      answer:
+        type: string
+      category:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      question:
+        type: string
+      sort_order:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  models.HomepageSection:
+    properties:
+      content: {}
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      image:
+        type: string
+      is_active:
+        type: boolean
+      section_key:
+        type: string
+      sort_order:
+        type: integer
+      subtitle:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.LoanInquiry:
+    properties:
+      city:
+        type: string
+      created_at:
+        type: string
+      email:
+        type: string
+      full_name:
+        type: string
+      id:
+        type: integer
+      monthly_income:
+        type: string
+      phone:
+        type: string
+      service:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.SEOPage:
+    properties:
+      canonical_url:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      meta_description:
+        type: string
+      meta_keywords:
+        type: string
+      meta_title:
+        type: string
+      og_description:
+        type: string
+      og_image:
+        type: string
+      og_title:
+        type: string
+      page_slug:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.Service:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      icon:
+        type: string
+      id:
+        type: integer
+      image:
+        type: string
+      is_active:
+        type: boolean
+      slug:
+        type: string
+      sort_order:
+        type: integer
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.Testimonial:
+    properties:
+      company:
+        type: string
+      content:
+        type: string
+      created_at:
+        type: string
+      designation:
+        type: string
+      id:
+        type: integer
+      image:
+        type: string
+      is_active:
+        type: boolean
+      name:
+        type: string
+      rating:
+        type: integer
+      sort_order:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  services.DashboardStats:
+    properties:
+      total_contact_inquiries:
+        type: integer
+      total_loan_inquiries:
+        type: integer
+      total_services:
+        type: integer
+      total_testimonials:
+        type: integer
+    type: object
+  utils.APIResponse:
+    properties:
+      data: {}
+      error:
+        type: string
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  utils.PaginatedResponse:
+    properties:
+      data: {}
+      page:
+        type: integer
+      page_size:
+        type: integer
+      success:
+        type: boolean
+      total:
+        type: integer
+      total_pages:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: API server for GK Capital finance website.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: GK Capital API Documentation
+  version: "1.0"
+paths:
+  /api/about:
+    get:
+      description: Get list of all active about sections
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.AboutSection'
+                  type: array
+              type: object
+      summary: Get active about sections
+      tags:
+      - Public Content
+  /api/admin/about:
+    get:
+      description: Get paginated list of all about sections
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.PaginatedResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all about sections for administration
+      tags:
+      - Admin About Sections
+    post:
+      consumes:
+      - application/json
+      description: Create an about section
+      parameters:
+      - description: Create About Section Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateAboutSectionRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.AboutSection'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: Create a new about section
+      tags:
+      - Admin About Sections
+  /api/admin/about/{id}:
+    delete:
+      description: Delete an about section by ID
+      parameters:
+      - description: About Section ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete an about section
+      tags:
+      - Admin About Sections
+    put:
+      consumes:
+      - application/json
+      description: Update details of an about section by ID
+      parameters:
+      - description: About Section ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update About Section Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateAboutSectionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.AboutSection'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: Update an existing about section
+      tags:
+      - Admin About Sections
+  /api/admin/contact-inquiries:
+    get:
+      description: Get list of contact inquiries with search and status filters
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: page_size
+        type: integer
+      - description: Filter by status (new/read/responded)
+        in: query
+        name: status
+        type: string
+      - description: Search query (name, email, phone)
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.PaginatedResponse'
+      security:
+      - BearerAuth: []
+      summary: Get contact inquiries
+      tags:
+      - Admin Inquiries
+  /api/admin/contact-inquiries/{id}:
+    patch:
+      consumes:
+      - application/json
+      description: Update status of an inquiry by ID
+      parameters:
+      - description: Inquiry ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: New status request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateInquiryStatusRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Update contact inquiry status
+      tags:
+      - Admin Inquiries
+  /api/admin/dashboard:
+    get:
+      description: Fetch aggregated metrics for services, testimonials, and inquiries
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/services.DashboardStats'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: Get Admin Dashboard Statistics
+      tags:
+      - Admin Dashboard
+  /api/admin/faqs:
+    get:
+      description: Get paginated list of all FAQs including inactive ones
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.PaginatedResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all FAQs for administration
+      tags:
+      - Admin FAQs
+    post:
+      consumes:
+      - application/json
+      description: Create a FAQ for administration
+      parameters:
+      - description: Create FAQ Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateFAQRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.FAQ'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: Create a new FAQ
+      tags:
+      - Admin FAQs
+  /api/admin/faqs/{id}:
+    delete:
+      description: Delete a FAQ by ID
+      parameters:
+      - description: FAQ ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a FAQ
+      tags:
+      - Admin FAQs
+    put:
+      consumes:
+      - application/json
+      description: Update details of a FAQ by ID
+      parameters:
+      - description: FAQ ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update FAQ Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateFAQRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.FAQ'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: Update an existing FAQ
+      tags:
+      - Admin FAQs
+  /api/admin/homepage:
+    get:
+      description: Get paginated list of all homepage sections
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.PaginatedResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all homepage sections for administration
+      tags:
+      - Admin Homepage Sections
+    post:
+      consumes:
+      - application/json
+      description: Create a homepage section
+      parameters:
+      - description: Create Homepage Section Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateHomepageSectionRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.HomepageSection'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: Create a new homepage section
+      tags:
+      - Admin Homepage Sections
+  /api/admin/homepage/{id}:
+    delete:
+      description: Delete a homepage section by ID
+      parameters:
+      - description: Homepage Section ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a homepage section
+      tags:
+      - Admin Homepage Sections
+    put:
+      consumes:
+      - application/json
+      description: Update details of a homepage section by ID
+      parameters:
+      - description: Homepage Section ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update Homepage Section Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateHomepageSectionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.HomepageSection'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: Update an existing homepage section
+      tags:
+      - Admin Homepage Sections
+  /api/admin/loan-inquiries:
+    get:
+      description: Get list of loan applications with search and status filters
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: page_size
+        type: integer
+      - description: Filter by status (new/contacted/approved/rejected)
+        in: query
+        name: status
+        type: string
+      - description: Search query (name, email, phone, city)
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.PaginatedResponse'
+      security:
+      - BearerAuth: []
+      summary: Get loan inquiries
+      tags:
+      - Admin Inquiries
+  /api/admin/loan-inquiries/{id}:
+    patch:
+      consumes:
+      - application/json
+      description: Update status of an application by ID
+      parameters:
+      - description: Inquiry ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: New status request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateInquiryStatusRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Update loan inquiry status
+      tags:
+      - Admin Inquiries
+  /api/admin/seo:
+    get:
+      description: Get list of all SEO entries for management
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.SEOPage'
+                  type: array
+              type: object
+      security:
+      - BearerAuth: []
+      summary: Get all SEO page configurations
+      tags:
+      - Admin SEO Pages
+    post:
+      consumes:
+      - application/json
+      description: Setup SEO meta tags for a page slug
+      parameters:
+      - description: Create SEO configuration request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateSEOPageRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SEOPage'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: Create a new SEO configuration
+      tags:
+      - Admin SEO Pages
+  /api/admin/seo/{id}:
+    delete:
+      description: Delete an SEO configuration by ID
+      parameters:
+      - description: SEO Configuration ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete an SEO configuration
+      tags:
+      - Admin SEO Pages
+    put:
+      consumes:
+      - application/json
+      description: Update SEO parameters by ID
+      parameters:
+      - description: SEO Configuration ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update SEO configuration request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateSEOPageRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SEOPage'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: Update an existing SEO configuration
+      tags:
+      - Admin SEO Pages
+  /api/admin/services:
+    get:
+      description: Get paginated list of all services including inactive ones
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.PaginatedResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all services for administration
+      tags:
+      - Admin Services
+    post:
+      consumes:
+      - application/json
+      description: Create a service for administration
+      parameters:
+      - description: Create Service Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateServiceRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Service'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a new service
+      tags:
+      - Admin Services
+  /api/admin/services/{id}:
+    delete:
+      description: Delete a service by ID
+      parameters:
+      - description: Service ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a service
+      tags:
+      - Admin Services
+    put:
+      consumes:
+      - application/json
+      description: Update details of a service by ID
+      parameters:
+      - description: Service ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update Service Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateServiceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Service'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Update an existing service
+      tags:
+      - Admin Services
+  /api/admin/testimonials:
+    get:
+      description: Get paginated list of all testimonials including inactive ones
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.PaginatedResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all testimonials for administration
+      tags:
+      - Admin Testimonials
+    post:
+      consumes:
+      - application/json
+      description: Create a testimonial for administration
+      parameters:
+      - description: Create Testimonial Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateTestimonialRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Testimonial'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: Create a new testimonial
+      tags:
+      - Admin Testimonials
+  /api/admin/testimonials/{id}:
+    delete:
+      description: Delete a testimonial by ID
+      parameters:
+      - description: Testimonial ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a testimonial
+      tags:
+      - Admin Testimonials
+    put:
+      consumes:
+      - application/json
+      description: Update details of a testimonial by ID
+      parameters:
+      - description: Testimonial ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update Testimonial Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateTestimonialRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Testimonial'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: Update an existing testimonial
+      tags:
+      - Admin Testimonials
+  /api/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate admin user and return JWT token
+      parameters:
+      - description: Login Credentials
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.LoginResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+      summary: Admin Login
+      tags:
+      - Auth
+  /api/contact:
+    post:
+      consumes:
+      - application/json
+      description: Submit the public contact form
+      parameters:
+      - description: Contact inquiry submission data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ContactRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.ContactInquiry'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+      summary: Submit a contact inquiry
+      tags:
+      - Contact Inquiry
+  /api/faqs:
+    get:
+      description: Get list of all active FAQs for public view
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.FAQ'
+                  type: array
+              type: object
+      summary: Get active FAQs
+      tags:
+      - Public FAQs
+  /api/homepage:
+    get:
+      description: Get list of all active homepage sections
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.HomepageSection'
+                  type: array
+              type: object
+      summary: Get active homepage sections
+      tags:
+      - Public Content
+  /api/loan-inquiry:
+    post:
+      consumes:
+      - application/json
+      description: Submit the loan application form
+      parameters:
+      - description: Loan inquiry application data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoanInquiryRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.LoanInquiry'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+      summary: Submit a loan inquiry (Apply Now)
+      tags:
+      - Loan Inquiry
+  /api/seo:
+    get:
+      description: Fetch meta tags, canonical URL and open graph fields for a public
+        page
+      parameters:
+      - description: Page slug (e.g. home, about, services, contact)
+        in: query
+        name: slug
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SEOPage'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+      summary: Get SEO configurations by page slug
+      tags:
+      - Public Content
+  /api/services:
+    get:
+      description: Get list of all active services for public view
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Service'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+      summary: Get active services
+      tags:
+      - Public Services
+  /api/services/{id}:
+    get:
+      description: Get details of a single service by ID
+      parameters:
+      - description: Service ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Service'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+      summary: Get service by ID
+      tags:
+      - Public Services
+  /api/testimonials:
+    get:
+      description: Get list of all active testimonials for public view
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.APIResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Testimonial'
+                  type: array
+              type: object
+      summary: Get active testimonials
+      tags:
+      - Public Testimonials
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
