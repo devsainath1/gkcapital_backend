@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
-	"github.com/joho/godotenv"
+	"gopkg.in/yaml.v3"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -14,32 +15,81 @@ import (
 var DB *gorm.DB
 
 type Config struct {
-	DBHost     string
-	DBPort     string
-	DBUser     string
-	DBPassword string
-	DBName     string
-	JWTSecret  string
-	ServerPort string
-	AppEnv     string
+	DBHost        string `yaml:"db_host"`
+	DBPort        string `yaml:"db_port"`
+	DBUser        string `yaml:"db_user"`
+	DBPassword    string `yaml:"db_password"`
+	DBName        string `yaml:"db_name"`
+	JWTSecret     string `yaml:"jwt_secret"`
+	ServerPort    string `yaml:"server_port"`
+	AppEnv        string `yaml:"app_env"`
+	UploadPath    string `yaml:"upload_path"`
+	MaxUploadSize string `yaml:"max_upload_size"`
 }
 
 func LoadConfig() *Config {
-	err := godotenv.Load()
-	if err != nil {
-		log.Println("Warning: .env file not found, using environment variables")
+	// 1. Determine environment (default to "local" if APP_ENV is empty)
+	env := os.Getenv("APP_ENV")
+	if env == "" {
+		env = "local"
 	}
 
-	return &Config{
-		DBHost:     getEnv("DB_HOST", "localhost"),
-		DBPort:     getEnv("DB_PORT", "3306"),
-		DBUser:     getEnv("DB_USER", "root"),
-		DBPassword: getEnv("DB_PASSWORD", ""),
-		DBName:     getEnv("DB_NAME", "gk_capital"),
-		JWTSecret:  getEnv("JWT_SECRET", "gk-capital-secret-key-change-in-production"),
-		ServerPort: getEnv("SERVER_PORT", "8080"),
-		AppEnv:     getEnv("APP_ENV", "development"),
+	// 2. Select folder config/prod or config/local
+	var configFolder string
+	if env == "prod" || env == "production" {
+		configFolder = "config/prod"
+	} else {
+		configFolder = "config/local"
 	}
+
+	// Define defaults
+	cfg := &Config{
+		AppEnv:        env,
+		ServerPort:    "8080",
+		DBHost:        "localhost",
+		DBPort:        "3306",
+		DBUser:        "root",
+		DBPassword:    "",
+		DBName:        "gk_capital",
+		JWTSecret:     "gk-capital-secret-key-change-in-production",
+		UploadPath:    "./uploads",
+		MaxUploadSize: "10",
+	}
+
+	// 3. Load YAML file
+	configPath := filepath.Join(configFolder, "config.yaml")
+	file, err := os.Open(configPath)
+	if err != nil {
+		log.Printf("Warning: Failed to open config file at %s (%v). Using defaults and env overrides.", configPath, err)
+	} else {
+		defer file.Close()
+		decoder := yaml.NewDecoder(file)
+		if err := decoder.Decode(cfg); err != nil {
+			log.Printf("Warning: Failed to decode config file %s: %v", configPath, err)
+		} else {
+			log.Printf("Successfully loaded config from %s", configPath)
+		}
+	}
+
+	// 4. Override with system environment variables if they are set
+	overrideWithEnv := func(key string, target *string) {
+		if val := os.Getenv(key); val != "" {
+			*target = val
+		}
+	}
+
+	overrideWithEnv("APP_ENV", &cfg.AppEnv)
+	overrideWithEnv("SERVER_PORT", &cfg.ServerPort)
+	overrideWithEnv("DB_HOST", &cfg.DBHost)
+	overrideWithEnv("DB_PORT", &cfg.DBPort)
+	overrideWithEnv("DB_USER", &cfg.DBUser)
+	overrideWithEnv("DB_PASSWORD", &cfg.DBPassword)
+	overrideWithEnv("DB_NAME", &cfg.DBName)
+	overrideWithEnv("JWT_SECRET", &cfg.JWTSecret)
+	overrideWithEnv("UPLOAD_PATH", &cfg.UploadPath)
+	overrideWithEnv("MAX_UPLOAD_SIZE", &cfg.MaxUploadSize)
+
+	return cfg
 }
 
 func ConnectDatabase(cfg *Config) {
@@ -52,7 +102,7 @@ func ConnectDatabase(cfg *Config) {
 	)
 
 	logLevel := logger.Info
-	if cfg.AppEnv == "production" {
+	if cfg.AppEnv == "production" || cfg.AppEnv == "prod" {
 		logLevel = logger.Error
 	}
 
@@ -73,12 +123,4 @@ func ConnectDatabase(cfg *Config) {
 
 	DB = db
 	log.Println("Database connected successfully")
-}
-
-func getEnv(key, defaultValue string) string {
-	value := os.Getenv(key)
-	if value == "" {
-		return defaultValue
-	}
-	return value
 }

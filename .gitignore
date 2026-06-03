@@ -1,1 +1,10 @@
 .env
+.env.local
+.env.prod
+.env.production
+.env.*
+!.env.example
+
+# YAML configurations
+config/local/config.yaml
+config/prod/config.yaml
