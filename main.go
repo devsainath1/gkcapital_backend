@@ -342,7 +342,7 @@ func seedData() {
 			Title:       "Red Zone Property Purchase",
 			Slug:        "red-zone-property-purchase",
 			Description: "Specialized financing solutions for purchasing properties in red zone or restricted areas with expert guidance on regulatory compliance, documentation, and bank approvals.",
-			Image:       "https://images.unsplash.com/photo-1448630360428-65456659e636?auto=format&fit=crop&w=800&q=80",
+			Image:       "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80",
 			Icon:        "MapPin",
 			IsActive:    true,
 			SortOrder:   10,
