@@ -34,6 +34,9 @@ COPY --from=builder /app/server .
 # Copy docs directory (Swagger UI)
 COPY --from=builder /app/docs ./docs
 
+# Copy config directory (YAML configs for prod/local)
+COPY --from=builder /app/config ./config
+
 # Uploads directory
 RUN mkdir -p /app/uploads
 

@@ -5,6 +5,5 @@
 .env.*
 !.env.example
 
-# YAML configurations
+# YAML configurations (local only – prod config is committed with safe defaults)
 config/local/config.yaml
-config/prod/config.yaml
