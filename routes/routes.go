@@ -22,6 +22,7 @@ func SetupRouter(
 	loanCtrl *controllers.LoanInquiryController,
 	seoCtrl *controllers.SEOController,
 	dashboardCtrl *controllers.DashboardController,
+	mediaCtrl *controllers.MediaController,
 ) *gin.Engine {
 	r := gin.Default()
 
@@ -59,6 +60,10 @@ func SetupRouter(
 		api.GET("/homepage", homepageCtrl.GetAll)
 		api.GET("/about", aboutCtrl.GetAll)
 		api.GET("/seo", seoCtrl.GetBySlug)
+
+		// Public Media Routes
+		api.GET("/media/:id", mediaCtrl.Serve)
+		api.GET("/media/name/:name", mediaCtrl.ServeByName)
 
 		// Admin Routes (JWT Protected)
 		admin := api.Group("/admin")
@@ -110,6 +115,11 @@ func SetupRouter(
 			// Loan Inquiries
 			admin.GET("/loan-inquiries", loanCtrl.GetAll)
 			admin.PATCH("/loan-inquiries/:id", loanCtrl.UpdateStatus)
+
+			// Media Assets
+			admin.GET("/media", mediaCtrl.AdminGetAll)
+			admin.POST("/media/upload", mediaCtrl.Upload)
+			admin.DELETE("/media/:id", mediaCtrl.Delete)
 		}
 	}
 

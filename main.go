@@ -1,7 +1,11 @@
 package main
 
 import (
+	"fmt"
+	"io"
 	"log"
+	"net/http"
+	"strings"
 
 	"gk-capital-backend/config"
 	"gk-capital-backend/controllers"
@@ -53,6 +57,7 @@ func main() {
 	contactRepo := repository.NewContactRepository(config.DB)
 	loanRepo := repository.NewLoanInquiryRepository(config.DB)
 	seoRepo := repository.NewSEORepository(config.DB)
+	mediaRepo := repository.NewMediaRepository(config.DB)
 
 	// Initialize Services
 	authService := services.NewAuthService(userRepo, cfg)
@@ -65,6 +70,7 @@ func main() {
 	loanService := services.NewLoanInquiryService(loanRepo)
 	seoService := services.NewSEOService(seoRepo)
 	dashboardService := services.NewDashboardService(serviceRepo, testimonialRepo, contactRepo, loanRepo)
+	mediaService := services.NewMediaService(mediaRepo)
 
 	// Initialize Controllers
 	authCtrl := controllers.NewAuthController(authService)
@@ -77,6 +83,10 @@ func main() {
 	loanCtrl := controllers.NewLoanInquiryController(loanService)
 	seoCtrl := controllers.NewSEOController(seoService)
 	dashboardCtrl := controllers.NewDashboardController(dashboardService)
+	mediaCtrl := controllers.NewMediaController(mediaService)
+
+	// Seed media assets (logo + images)
+	seedMediaAssets(mediaService)
 
 	// Setup Router
 	r := routes.SetupRouter(
@@ -91,6 +101,7 @@ func main() {
 		loanCtrl,
 		seoCtrl,
 		dashboardCtrl,
+		mediaCtrl,
 	)
 
 	// Start Server
@@ -113,6 +124,7 @@ func seedData() {
 		&models.SEOPage{},
 		&models.HomepageSection{},
 		&models.AboutSection{},
+		&models.MediaAsset{},
 	)
 	if err != nil {
 		log.Printf("Auto migration warning: %v", err)
@@ -213,7 +225,7 @@ func seedData() {
 			SectionKey: "statistics",
 			Title:      "GK Capital by the Numbers",
 			Content: []map[string]interface{}{
-				{"label": "Success Rate", "value": "98%"},
+				{"label": "Success Rate", "value": "100%"},
 				{"label": "Lending Partners", "value": "20+"},
 				{"label": "Happy Clients", "value": "5,000+"},
 				{"label": "Loans Processed", "value": "₹500Cr+"},
@@ -495,4 +507,58 @@ func seedData() {
 		config.DB.Create(&p)
 	}
 	log.Println("Seeded SEO pages configurations")
+}
+
+func seedMediaAssets(mediaService *services.MediaService) {
+	// Define media assets to seed: name -> URL
+	assets := map[string]string{
+		"logo":       "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=200&q=80",
+		"hero-image": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1920&q=80",
+	}
+
+	for name, url := range assets {
+		// Skip if already exists
+		if mediaService.ExistsByName(name) {
+			log.Printf("Media asset '%s' already exists, skipping", name)
+			continue
+		}
+
+		// Download image from URL
+		resp, err := http.Get(url)
+		if err != nil {
+			log.Printf("Failed to download media asset '%s': %v", name, err)
+			continue
+		}
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK {
+			log.Printf("Failed to download media asset '%s': status %d", name, resp.StatusCode)
+			continue
+		}
+
+		data, err := io.ReadAll(resp.Body)
+		if err != nil {
+			log.Printf("Failed to read media asset '%s': %v", name, err)
+			continue
+		}
+
+		// Detect MIME type from Content-Type header
+		mimeType := resp.Header.Get("Content-Type")
+		if mimeType == "" || strings.HasPrefix(mimeType, "application/octet-stream") {
+			mimeType = "image/jpeg" // default fallback
+		}
+		// Strip any charset suffix (e.g. "image/jpeg; charset=utf-8")
+		if idx := strings.Index(mimeType, ";"); idx != -1 {
+			mimeType = strings.TrimSpace(mimeType[:idx])
+		}
+
+		_, err = mediaService.CreateFromBytes(name, mimeType, data)
+		if err != nil {
+			log.Printf("Failed to seed media asset '%s': %v", name, err)
+			continue
+		}
+		log.Printf("Seeded media asset '%s' (%s, %d bytes)", name, mimeType, len(data))
+	}
+
+	fmt.Println("Media asset seeding complete.")
 }
