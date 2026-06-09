@@ -557,7 +557,6 @@ func seedData() {
 func seedMediaAssets(mediaService *services.MediaService) {
 	// Define media assets to seed: name -> URL
 	assets := map[string]string{
-		"logo":       "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=200&q=80",
 		"hero-image": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1920&q=80",
 	}
 

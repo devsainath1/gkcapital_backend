@@ -73,8 +73,15 @@ func (ctrl *MediaController) ServeByName(c *gin.Context) {
 		return
 	}
 
-	c.Header("Cache-Control", "public, max-age=2592000, immutable")
-	c.Header("ETag", fmt.Sprintf(`"%d-%d"`, asset.ID, asset.UpdatedAt.Unix()))
+	etag := fmt.Sprintf(`"%d-%d"`, asset.ID, asset.UpdatedAt.Unix())
+	c.Header("Cache-Control", "no-cache")
+	c.Header("ETag", etag)
+
+	if c.GetHeader("If-None-Match") == etag {
+		c.Status(http.StatusNotModified)
+		return
+	}
+
 	c.Data(http.StatusOK, asset.MimeType, asset.Data)
 }
 
