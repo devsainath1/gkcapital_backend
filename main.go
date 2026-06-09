@@ -434,24 +434,28 @@ func seedData() {
 	if testCount == 0 {
 		testimonials := []models.Testimonial{
 			{
-				Name:        "Marcus Sterling",
-				Designation: "CEO",
-				Company:     "Sterling Logistics Group",
-				Content:     "GK Capital secured our Series B bridge loan in record time. Their team understands commercial structures better than any traditional banking institution we worked with.",
-				Rating:      5,
-				Image:       "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&h=150&q=80",
-				IsActive:    true,
-				SortOrder:   1,
+				Name:          "Marcus Sterling",
+				LegacyName:    "Marcus Sterling",
+				Designation:   "CEO",
+				Company:       "Sterling Logistics Group",
+				Content:       "GK Capital secured our Series B bridge loan in record time. Their team understands commercial structures better than any traditional banking institution we worked with.",
+				LegacyContent: "GK Capital secured our Series B bridge loan in record time. Their team understands commercial structures better than any traditional banking institution we worked with.",
+				Rating:        5,
+				Image:         "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&h=150&q=80",
+				IsActive:      true,
+				SortOrder:     1,
 			},
 			{
-				Name:        "Elena Rostova",
-				Designation: "Founder",
-				Company:     "Vanguard Tech Lab",
-				Content:     "Managing corporate treasury is complicated. GK Capital structured an automated cash-management portfolio that generates outstanding yields while retaining immediate liquidity.",
-				Rating:      5,
-				Image:       "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&h=150&q=80",
-				IsActive:    true,
-				SortOrder:   2,
+				Name:          "Elena Rostova",
+				LegacyName:    "Elena Rostova",
+				Designation:   "Founder",
+				Company:       "Vanguard Tech Lab",
+				Content:       "Managing corporate treasury is complicated. GK Capital structured an automated cash-management portfolio that generates outstanding yields while retaining immediate liquidity.",
+				LegacyContent: "Managing corporate treasury is complicated. GK Capital structured an automated cash-management portfolio that generates outstanding yields while retaining immediate liquidity.",
+				Rating:        5,
+				Image:         "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&h=150&q=80",
+				IsActive:      true,
+				SortOrder:     2,
 			},
 		}
 		for _, t := range testimonials {
@@ -545,7 +549,7 @@ func seedData() {
 	}
 	for _, setting := range defaultSettings {
 		var existing models.WebsiteSetting
-		err := config.DB.Where("key = ?", setting.Key).First(&existing).Error
+		err := config.DB.Where("website_settings.key = ?", setting.Key).First(&existing).Error
 		if err != nil {
 			config.DB.Create(&setting)
 			log.Printf("Seeded setting '%s'", setting.Key)

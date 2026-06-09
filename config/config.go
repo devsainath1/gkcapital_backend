@@ -95,7 +95,7 @@ func ConnectDatabase(cfg *Config) {
 		cfg.DBName,
 	)
 
-	logLevel := logger.Info
+	logLevel := logger.Warn
 	if cfg.AppEnv == "production" || cfg.AppEnv == "prod" {
 		logLevel = logger.Error
 	}

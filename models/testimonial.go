@@ -6,10 +6,12 @@ import (
 
 type Testimonial struct {
 	ID          uint      `gorm:"primaryKey" json:"id"`
-	Name        string    `gorm:"size:255;not null" json:"name"`
-	Designation string    `gorm:"size:255" json:"designation"`
-	Company     string    `gorm:"size:255" json:"company"`
-	Content     string    `gorm:"type:text;not null" json:"content"`
+	Name          string    `gorm:"column:customer_name;size:255;not null" json:"name"`
+	LegacyName    string    `gorm:"column:name;size:255;not null" json:"-"`
+	Designation   string    `gorm:"size:255" json:"designation"`
+	Company       string    `gorm:"size:255" json:"company"`
+	Content       string    `gorm:"column:review;type:text;not null" json:"content"`
+	LegacyContent string    `gorm:"column:content;type:text;not null" json:"-"`
 	Rating      int       `gorm:"default:5" json:"rating"`
 	Image       string    `gorm:"size:500" json:"image"`
 	IsActive    bool      `gorm:"default:true" json:"is_active"`

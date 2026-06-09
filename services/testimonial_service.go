@@ -38,14 +38,16 @@ func (s *TestimonialService) Create(req dto.CreateTestimonialRequest) (*models.T
 	}
 
 	testimonial := &models.Testimonial{
-		Name:        req.Name,
-		Designation: req.Designation,
-		Company:     req.Company,
-		Content:     req.Content,
-		Rating:      rating,
-		Image:       req.Image,
-		IsActive:    isActive,
-		SortOrder:   req.SortOrder,
+		Name:          req.Name,
+		LegacyName:    req.Name,
+		Designation:   req.Designation,
+		Company:       req.Company,
+		Content:       req.Content,
+		LegacyContent: req.Content,
+		Rating:        rating,
+		Image:         req.Image,
+		IsActive:      isActive,
+		SortOrder:     req.SortOrder,
 	}
 
 	err := s.repo.Create(testimonial)
@@ -64,6 +66,7 @@ func (s *TestimonialService) Update(id uint, req dto.UpdateTestimonialRequest) (
 
 	if req.Name != "" {
 		testimonial.Name = req.Name
+		testimonial.LegacyName = req.Name
 	}
 	if req.Designation != "" {
 		testimonial.Designation = req.Designation
@@ -73,6 +76,7 @@ func (s *TestimonialService) Update(id uint, req dto.UpdateTestimonialRequest) (
 	}
 	if req.Content != "" {
 		testimonial.Content = req.Content
+		testimonial.LegacyContent = req.Content
 	}
 	if req.Rating != 0 {
 		testimonial.Rating = req.Rating
