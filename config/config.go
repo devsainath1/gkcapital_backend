@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"path/filepath"
+	"strings"
 
-	"gopkg.in/yaml.v3"
+	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -15,79 +15,69 @@ import (
 var DB *gorm.DB
 
 type Config struct {
-	DBHost        string `yaml:"db_host"`
-	DBPort        string `yaml:"db_port"`
-	DBUser        string `yaml:"db_user"`
-	DBPassword    string `yaml:"db_password"`
-	DBName        string `yaml:"db_name"`
-	JWTSecret     string `yaml:"jwt_secret"`
-	ServerPort    string `yaml:"server_port"`
-	AppEnv        string `yaml:"app_env"`
-	UploadPath    string `yaml:"upload_path"`
-	MaxUploadSize string `yaml:"max_upload_size"`
+	DBHost        string `mapstructure:"db_host"`
+	DBPort        string `mapstructure:"db_port"`
+	DBUser        string `mapstructure:"db_user"`
+	DBPassword    string `mapstructure:"db_password"`
+	DBName        string `mapstructure:"db_name"`
+	JWTSecret     string `mapstructure:"jwt_secret"`
+	ServerPort    string `mapstructure:"server_port"`
+	AppEnv        string `mapstructure:"app_env"`
+	UploadPath    string `mapstructure:"upload_path"`
+	MaxUploadSize string `mapstructure:"max_upload_size"`
 }
 
 func LoadConfig() *Config {
-	// 1. Determine environment (default to "local" if APP_ENV is empty)
-	env := os.Getenv("APP_ENV")
-	if env == "" {
-		env = "local"
+	v := viper.New()
+
+	// ── 1. Built-in defaults ─────────────────────────────────────────────────
+	v.SetDefault("app_env", "local")
+	v.SetDefault("server_port", "8080")
+	v.SetDefault("db_host", "localhost")
+	v.SetDefault("db_port", "3306")
+	v.SetDefault("db_user", "root")
+	v.SetDefault("db_password", "")
+	v.SetDefault("db_name", "gk_capital")
+	v.SetDefault("jwt_secret", "gk-capital-secret-key-change-in-production")
+	v.SetDefault("upload_path", "./uploads")
+	v.SetDefault("max_upload_size", "10")
+
+	// ── 2. Config file ───────────────────────────────────────────────────────
+	// Resolve config file path:
+	//   Priority: CONFIG_PATH env var → ./config.yaml (fallback)
+	configPath := os.Getenv("CONFIG_PATH")
+	if configPath == "" {
+		configPath = "./config.yaml"
 	}
 
-	// 2. Select folder config/prod or config/local
-	var configFolder string
-	if env == "prod" || env == "production" {
-		configFolder = "config/prod"
-	} else {
-		configFolder = "config/local"
-	}
+	v.SetConfigFile(configPath)
+	v.SetConfigType("yaml")
 
-	// Define defaults
-	cfg := &Config{
-		AppEnv:        env,
-		ServerPort:    "8080",
-		DBHost:        "localhost",
-		DBPort:        "3306",
-		DBUser:        "root",
-		DBPassword:    "",
-		DBName:        "gk_capital",
-		JWTSecret:     "gk-capital-secret-key-change-in-production",
-		UploadPath:    "./uploads",
-		MaxUploadSize: "10",
-	}
-
-	// 3. Load YAML file
-	configPath := filepath.Join(configFolder, "config.yaml")
-	file, err := os.Open(configPath)
-	if err != nil {
-		log.Printf("Warning: Failed to open config file at %s (%v). Using defaults and env overrides.", configPath, err)
-	} else {
-		defer file.Close()
-		decoder := yaml.NewDecoder(file)
-		if err := decoder.Decode(cfg); err != nil {
-			log.Printf("Warning: Failed to decode config file %s: %v", configPath, err)
+	if err := v.ReadInConfig(); err != nil {
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			log.Printf("Info: No config file found at '%s'. Using defaults + env vars.", configPath)
 		} else {
-			log.Printf("Successfully loaded config from %s", configPath)
+			log.Printf("Warning: Failed to read config file '%s': %v. Using defaults + env vars.", configPath, err)
 		}
+	} else {
+		log.Printf("Successfully loaded config from '%s'", v.ConfigFileUsed())
 	}
 
-	// 4. Override with system environment variables if they are set
-	overrideWithEnv := func(key string, target *string) {
-		if val := os.Getenv(key); val != "" {
-			*target = val
-		}
+	// ── 3. Auto-bind environment variables ───────────────────────────────────
+	// DB_HOST → db_host, JWT_SECRET → jwt_secret, etc.
+	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+	v.AutomaticEnv()
+
+	// ── 4. Unmarshal into Config struct ──────────────────────────────────────
+	cfg := &Config{}
+	if err := v.Unmarshal(cfg); err != nil {
+		log.Fatalf("Failed to unmarshal config: %v", err)
 	}
 
-	overrideWithEnv("APP_ENV", &cfg.AppEnv)
-	overrideWithEnv("SERVER_PORT", &cfg.ServerPort)
-	overrideWithEnv("DB_HOST", &cfg.DBHost)
-	overrideWithEnv("DB_PORT", &cfg.DBPort)
-	overrideWithEnv("DB_USER", &cfg.DBUser)
-	overrideWithEnv("DB_PASSWORD", &cfg.DBPassword)
-	overrideWithEnv("DB_NAME", &cfg.DBName)
-	overrideWithEnv("JWT_SECRET", &cfg.JWTSecret)
-	overrideWithEnv("UPLOAD_PATH", &cfg.UploadPath)
-	overrideWithEnv("MAX_UPLOAD_SIZE", &cfg.MaxUploadSize)
+	log.Printf("Config loaded: env=%s port=%s db=%s@%s:%s/%s",
+		cfg.AppEnv, cfg.ServerPort,
+		cfg.DBUser, cfg.DBHost, cfg.DBPort, cfg.DBName,
+	)
 
 	return cfg
 }

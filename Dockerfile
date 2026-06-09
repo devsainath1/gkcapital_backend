@@ -34,12 +34,17 @@ COPY --from=builder /app/server .
 # Copy docs directory (Swagger UI)
 COPY --from=builder /app/docs ./docs
 
-# Copy config directory (YAML configs for prod/local)
+# Copy config directory (YAML configs for prod/local) and the root template.
+# At runtime, point CONFIG_PATH to the config file you want to use.
+# Example: CONFIG_PATH=/app/config/prod/config.yaml ./server
+# Secrets (db_password, jwt_secret) should always be injected via env vars.
 COPY --from=builder /app/config ./config
+COPY --from=builder /app/config.yaml ./config.yaml
 
 # Uploads directory
 RUN mkdir -p /app/uploads
 
 EXPOSE 8080
 
+# CONFIG_PATH defaults to ./config.yaml; override for a different file.
 CMD ["./server"]
