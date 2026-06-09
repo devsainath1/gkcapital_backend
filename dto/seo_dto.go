@@ -3,6 +3,7 @@ package dto
 // CreateSEOPageRequest represents request to create an SEO page entry
 type CreateSEOPageRequest struct {
 	PageSlug        string `json:"page_slug" binding:"required"`
+	PageName        string `json:"page_name"`
 	MetaTitle       string `json:"meta_title"`
 	MetaDescription string `json:"meta_description"`
 	MetaKeywords    string `json:"meta_keywords"`
@@ -15,6 +16,7 @@ type CreateSEOPageRequest struct {
 // UpdateSEOPageRequest represents request to update an SEO page entry
 type UpdateSEOPageRequest struct {
 	PageSlug        string `json:"page_slug"`
+	PageName        string `json:"page_name"`
 	MetaTitle       string `json:"meta_title"`
 	MetaDescription string `json:"meta_description"`
 	MetaKeywords    string `json:"meta_keywords"`

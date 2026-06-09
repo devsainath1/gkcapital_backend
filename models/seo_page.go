@@ -7,6 +7,7 @@ import (
 type SEOPage struct {
 	ID              uint      `gorm:"primaryKey" json:"id"`
 	PageSlug        string    `gorm:"size:255;uniqueIndex;not null" json:"page_slug"`
+	PageName        string    `gorm:"size:255;not null" json:"page_name"`
 	MetaTitle       string    `gorm:"size:500" json:"meta_title"`
 	MetaDescription string    `gorm:"type:text" json:"meta_description"`
 	MetaKeywords    string    `gorm:"type:text" json:"meta_keywords"`

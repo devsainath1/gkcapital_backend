@@ -444,6 +444,7 @@ func seedData() {
 	pages := []models.SEOPage{
 		{
 			PageSlug:        "home",
+			PageName:        "Home",
 			MetaTitle:       "GK Capital | Premier MSME Loan Consultancy Services",
 			MetaDescription: "Partner with GK Capital for quick, secure, and hassle-free MSME loans, machinery loans, working capital funding, and business financing solutions.",
 			MetaKeywords:    "msme loan, machinery loan, business funding, working capital, cgtmse loan, cc od facility",
@@ -454,6 +455,7 @@ func seedData() {
 		},
 		{
 			PageSlug:        "about",
+			PageName:        "About Us",
 			MetaTitle:       "About Us | GK Capital Legacy & Values",
 			MetaDescription: "Read the story of GK Capital. Discover how we partner with leading banks and NBFCs to empower MSMEs and individuals.",
 			MetaKeywords:    "about company, loan advisor, financial consulting, partners",
@@ -464,6 +466,7 @@ func seedData() {
 		},
 		{
 			PageSlug:        "services",
+			PageName:        "Our Services",
 			MetaTitle:       "Our Loan Services | CGTMSE, Mudra, Business & Home Loans",
 			MetaDescription: "Explore our full range of MSME financial services: CGTMSE loans, CC & OD, Machinery loans, Mudra loans, LAP, Home loans, Project loans, and more.",
 			MetaKeywords:    "business loans, cgtmse, mudra loan, machinery financing, project loan, red zone property, cc od, personal loan",
@@ -474,6 +477,7 @@ func seedData() {
 		},
 		{
 			PageSlug:        "calculator",
+			PageName:        "EMI Calculator",
 			MetaTitle:       "EMI Calculator | Loan Interest & Tenure Estimator",
 			MetaDescription: "Use GK Capital's smart loan EMI calculator to compute monthly payments, total interest costs, and amortizations in real time.",
 			MetaKeywords:    "loan calculator, emi calculator, interest tool, finance planner",
@@ -484,6 +488,7 @@ func seedData() {
 		},
 		{
 			PageSlug:        "contact",
+			PageName:        "Contact Us",
 			MetaTitle:       "Contact Us | Get in Touch with GK Capital",
 			MetaDescription: "Reach our advisory and customer relationship desks for consultations, inquiries, or support.",
 			MetaKeywords:    "contact info, support email, phone, location",
@@ -494,6 +499,7 @@ func seedData() {
 		},
 		{
 			PageSlug:        "apply",
+			PageName:        "Apply Now",
 			MetaTitle:       "Apply for Loan | Secure Capital Lead Form",
 			MetaDescription: "Submit your basic credentials and capital requirements to secure an instant consultation and financing assessment.",
 			MetaKeywords:    "loan apply, lead form, fast financing, commercial cash",

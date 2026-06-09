@@ -29,6 +29,7 @@ func (s *SEOService) GetBySlug(slug string) (*models.SEOPage, error) {
 func (s *SEOService) Create(req dto.CreateSEOPageRequest) (*models.SEOPage, error) {
 	page := &models.SEOPage{
 		PageSlug:        req.PageSlug,
+		PageName:        req.PageName,
 		MetaTitle:       req.MetaTitle,
 		MetaDescription: req.MetaDescription,
 		MetaKeywords:    req.MetaKeywords,
@@ -54,6 +55,9 @@ func (s *SEOService) Update(id uint, req dto.UpdateSEOPageRequest) (*models.SEOP
 
 	if req.PageSlug != "" {
 		page.PageSlug = req.PageSlug
+	}
+	if req.PageName != "" {
+		page.PageName = req.PageName
 	}
 	if req.MetaTitle != "" {
 		page.MetaTitle = req.MetaTitle
