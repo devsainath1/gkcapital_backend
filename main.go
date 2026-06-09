@@ -58,6 +58,7 @@ func main() {
 	loanRepo := repository.NewLoanInquiryRepository(config.DB)
 	seoRepo := repository.NewSEORepository(config.DB)
 	mediaRepo := repository.NewMediaRepository(config.DB)
+	settingRepo := repository.NewWebsiteSettingRepository(config.DB)
 
 	// Initialize Services
 	authService := services.NewAuthService(userRepo, cfg)
@@ -71,6 +72,8 @@ func main() {
 	seoService := services.NewSEOService(seoRepo)
 	dashboardService := services.NewDashboardService(serviceRepo, testimonialRepo, contactRepo, loanRepo)
 	mediaService := services.NewMediaService(mediaRepo)
+	userService := services.NewUserService(userRepo)
+	settingService := services.NewWebsiteSettingService(settingRepo)
 
 	// Initialize Controllers
 	authCtrl := controllers.NewAuthController(authService)
@@ -84,6 +87,8 @@ func main() {
 	seoCtrl := controllers.NewSEOController(seoService)
 	dashboardCtrl := controllers.NewDashboardController(dashboardService)
 	mediaCtrl := controllers.NewMediaController(mediaService)
+	userCtrl := controllers.NewUserController(userService)
+	settingCtrl := controllers.NewWebsiteSettingController(settingService)
 
 	// Seed media assets (logo + images)
 	seedMediaAssets(mediaService)
@@ -102,6 +107,8 @@ func main() {
 		seoCtrl,
 		dashboardCtrl,
 		mediaCtrl,
+		userCtrl,
+		settingCtrl,
 	)
 
 	// Start Server
@@ -130,10 +137,9 @@ func seedData() {
 		log.Printf("Auto migration warning: %v", err)
 	}
 
-	// Seed Super Admin if not exists
-	var count int64
-	config.DB.Model(&models.User{}).Count(&count)
-	if count == 0 {
+	// Seed Super Admin & Manager if not exists
+	var adminUser models.User
+	if err := config.DB.Where("email = ?", "admin@gkcapital.com").First(&adminUser).Error; err != nil {
 		hashedPassword, _ := utils.HashPassword("admin123")
 		admin := models.User{
 			Name:     "GK Capital Administrator",
@@ -145,6 +151,21 @@ func seedData() {
 		config.DB.Create(&admin)
 		log.Println("Seeded admin user: admin@gkcapital.com / admin123")
 	}
+
+	var managerUser models.User
+	if err := config.DB.Where("email = ?", "manager@gkcapital.com").First(&managerUser).Error; err != nil {
+		hashedPassword, _ := utils.HashPassword("manager123")
+		manager := models.User{
+			Name:     "GK Capital Manager",
+			Email:    "manager@gkcapital.com",
+			Password: hashedPassword,
+			Role:     "MANAGER",
+			IsActive: true,
+		}
+		config.DB.Create(&manager)
+		log.Println("Seeded manager user: manager@gkcapital.com / manager123")
+	}
+
 
 	// Seed or update Homepage sections
 	homepageSections := []models.HomepageSection{
@@ -513,6 +534,24 @@ func seedData() {
 		config.DB.Create(&p)
 	}
 	log.Println("Seeded SEO pages configurations")
+
+	// Seed default website settings
+	defaultSettings := []models.WebsiteSetting{
+		{Key: "company_name", Value: "GK Capital"},
+		{Key: "office_address", Value: "No. 42, 2nd Floor, Grand Plaza, MG Road, Bengaluru, Karnataka - 560001"},
+		{Key: "office_phone", Value: "+91 80 4912 3456"},
+		{Key: "office_email", Value: "info@gkcapital.com"},
+		{Key: "office_map_url", Value: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3887.925828456073!2d77.60123531536647!3d12.97659399085273!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1679093bfcd3%3A0xe54ef4fc039bbf8!2sMG%20Road%2C%20Bengaluru%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1623233890204!5m2!1sen!2sin"},
+	}
+	for _, setting := range defaultSettings {
+		var existing models.WebsiteSetting
+		err := config.DB.Where("key = ?", setting.Key).First(&existing).Error
+		if err != nil {
+			config.DB.Create(&setting)
+			log.Printf("Seeded setting '%s'", setting.Key)
+		}
+	}
+	log.Println("Seeded default website settings")
 }
 
 func seedMediaAssets(mediaService *services.MediaService) {

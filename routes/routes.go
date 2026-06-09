@@ -23,6 +23,8 @@ func SetupRouter(
 	seoCtrl *controllers.SEOController,
 	dashboardCtrl *controllers.DashboardController,
 	mediaCtrl *controllers.MediaController,
+	userCtrl *controllers.UserController,
+	websiteSettingCtrl *controllers.WebsiteSettingController,
 ) *gin.Engine {
 	r := gin.Default()
 
@@ -60,6 +62,7 @@ func SetupRouter(
 		api.GET("/homepage", homepageCtrl.GetAll)
 		api.GET("/about", aboutCtrl.GetAll)
 		api.GET("/seo", seoCtrl.GetBySlug)
+		api.GET("/settings", websiteSettingCtrl.GetPublic)
 
 		// Public Media Routes
 		api.GET("/media/:id", mediaCtrl.Serve)
@@ -69,57 +72,77 @@ func SetupRouter(
 		admin := api.Group("/admin")
 		admin.Use(middleware.AuthMiddleware(cfg.JWTSecret))
 		{
-			// Dashboard
-			admin.GET("/dashboard", dashboardCtrl.GetStats)
+			// Manager Group: MANAGER and SUPER_ADMIN
+			managerGroup := admin.Group("")
+			managerGroup.Use(middleware.RequireRole("MANAGER", "SUPER_ADMIN"))
+			{
+				// Dashboard
+				managerGroup.GET("/dashboard", dashboardCtrl.GetStats)
 
-			// Services
-			admin.GET("/services", serviceCtrl.AdminGetAll)
-			admin.POST("/services", serviceCtrl.Create)
-			admin.PUT("/services/:id", serviceCtrl.Update)
-			admin.DELETE("/services/:id", serviceCtrl.Delete)
+				// Contact Inquiries
+				managerGroup.GET("/contact-inquiries", contactCtrl.GetAll)
+				managerGroup.PATCH("/contact-inquiries/:id", contactCtrl.UpdateStatus)
 
-			// Testimonials
-			admin.GET("/testimonials", testimonialCtrl.AdminGetAll)
-			admin.POST("/testimonials", testimonialCtrl.Create)
-			admin.PUT("/testimonials/:id", testimonialCtrl.Update)
-			admin.DELETE("/testimonials/:id", testimonialCtrl.Delete)
+				// Loan Inquiries
+				managerGroup.GET("/loan-inquiries", loanCtrl.GetAll)
+				managerGroup.PATCH("/loan-inquiries/:id", loanCtrl.UpdateStatus)
+			}
 
-			// FAQs
-			admin.GET("/faqs", faqCtrl.AdminGetAll)
-			admin.POST("/faqs", faqCtrl.Create)
-			admin.PUT("/faqs/:id", faqCtrl.Update)
-			admin.DELETE("/faqs/:id", faqCtrl.Delete)
+			// Super Admin Group: SUPER_ADMIN only
+			superAdminGroup := admin.Group("")
+			superAdminGroup.Use(middleware.RequireRole("SUPER_ADMIN"))
+			{
+				// Services
+				superAdminGroup.GET("/services", serviceCtrl.AdminGetAll)
+				superAdminGroup.POST("/services", serviceCtrl.Create)
+				superAdminGroup.PUT("/services/:id", serviceCtrl.Update)
+				superAdminGroup.DELETE("/services/:id", serviceCtrl.Delete)
 
-			// Homepage Sections
-			admin.GET("/homepage", homepageCtrl.AdminGetAll)
-			admin.POST("/homepage", homepageCtrl.Create)
-			admin.PUT("/homepage/:id", homepageCtrl.Update)
-			admin.DELETE("/homepage/:id", homepageCtrl.Delete)
+				// Testimonials
+				superAdminGroup.GET("/testimonials", testimonialCtrl.AdminGetAll)
+				superAdminGroup.POST("/testimonials", testimonialCtrl.Create)
+				superAdminGroup.PUT("/testimonials/:id", testimonialCtrl.Update)
+				superAdminGroup.DELETE("/testimonials/:id", testimonialCtrl.Delete)
 
-			// About Sections
-			admin.GET("/about", aboutCtrl.AdminGetAll)
-			admin.POST("/about", aboutCtrl.Create)
-			admin.PUT("/about/:id", aboutCtrl.Update)
-			admin.DELETE("/about/:id", aboutCtrl.Delete)
+				// FAQs
+				superAdminGroup.GET("/faqs", faqCtrl.AdminGetAll)
+				superAdminGroup.POST("/faqs", faqCtrl.Create)
+				superAdminGroup.PUT("/faqs/:id", faqCtrl.Update)
+				superAdminGroup.DELETE("/faqs/:id", faqCtrl.Delete)
 
-			// SEO Pages
-			admin.GET("/seo", seoCtrl.GetAll)
-			admin.POST("/seo", seoCtrl.Create)
-			admin.PUT("/seo/:id", seoCtrl.Update)
-			admin.DELETE("/seo/:id", seoCtrl.Delete)
+				// Homepage Sections
+				superAdminGroup.GET("/homepage", homepageCtrl.AdminGetAll)
+				superAdminGroup.POST("/homepage", homepageCtrl.Create)
+				superAdminGroup.PUT("/homepage/:id", homepageCtrl.Update)
+				superAdminGroup.DELETE("/homepage/:id", homepageCtrl.Delete)
 
-			// Contact Inquiries
-			admin.GET("/contact-inquiries", contactCtrl.GetAll)
-			admin.PATCH("/contact-inquiries/:id", contactCtrl.UpdateStatus)
+				// About Sections
+				superAdminGroup.GET("/about", aboutCtrl.AdminGetAll)
+				superAdminGroup.POST("/about", aboutCtrl.Create)
+				superAdminGroup.PUT("/about/:id", aboutCtrl.Update)
+				superAdminGroup.DELETE("/about/:id", aboutCtrl.Delete)
 
-			// Loan Inquiries
-			admin.GET("/loan-inquiries", loanCtrl.GetAll)
-			admin.PATCH("/loan-inquiries/:id", loanCtrl.UpdateStatus)
+				// SEO Pages
+				superAdminGroup.GET("/seo", seoCtrl.GetAll)
+				superAdminGroup.POST("/seo", seoCtrl.Create)
+				superAdminGroup.PUT("/seo/:id", seoCtrl.Update)
+				superAdminGroup.DELETE("/seo/:id", seoCtrl.Delete)
 
-			// Media Assets
-			admin.GET("/media", mediaCtrl.AdminGetAll)
-			admin.POST("/media/upload", mediaCtrl.Upload)
-			admin.DELETE("/media/:id", mediaCtrl.Delete)
+				// Media Assets
+				superAdminGroup.GET("/media", mediaCtrl.AdminGetAll)
+				superAdminGroup.POST("/media/upload", mediaCtrl.Upload)
+				superAdminGroup.DELETE("/media/:id", mediaCtrl.Delete)
+
+				// Users
+				superAdminGroup.GET("/users", userCtrl.GetAll)
+				superAdminGroup.POST("/users", userCtrl.Create)
+				superAdminGroup.PUT("/users/:id", userCtrl.Update)
+				superAdminGroup.DELETE("/users/:id", userCtrl.Delete)
+
+				// Website Settings
+				superAdminGroup.GET("/settings", websiteSettingCtrl.GetAll)
+				superAdminGroup.PUT("/settings", websiteSettingCtrl.BulkUpsert)
+			}
 		}
 	}
 

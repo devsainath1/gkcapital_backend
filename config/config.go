@@ -44,10 +44,14 @@ func LoadConfig() *Config {
 
 	// ── 2. Config file ───────────────────────────────────────────────────────
 	// Resolve config file path:
-	//   Priority: CONFIG_PATH env var → ./config.yaml (fallback)
+	//   Priority: CONFIG_PATH env var → ./config/local/config.yaml (local dev fallback) → ./config.yaml (fallback)
 	configPath := os.Getenv("CONFIG_PATH")
 	if configPath == "" {
-		configPath = "./config.yaml"
+		if _, err := os.Stat("./config/local/config.yaml"); err == nil {
+			configPath = "./config/local/config.yaml"
+		} else {
+			configPath = "./config.yaml"
+		}
 	}
 
 	v.SetConfigFile(configPath)
