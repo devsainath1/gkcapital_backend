@@ -49,7 +49,7 @@ func SetupRouter(
 
 		// Public Routes (Rate limited for writes)
 		publicWrites := api.Group("")
-		publicWrites.Use(middleware.RateLimitMiddleware(1.0, 5)) // 1 request per second, burst 5
+		publicWrites.Use(middleware.RateLimitMiddleware(0.05, 2)) // 1 request every 20 seconds, burst 2
 		{
 			publicWrites.POST("/contact", contactCtrl.Submit)
 			publicWrites.POST("/loan-inquiry", loanCtrl.Submit)
