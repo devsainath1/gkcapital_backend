@@ -16,7 +16,7 @@ func NewWebsiteSettingRepository(db *gorm.DB) *WebsiteSettingRepository {
 
 func (r *WebsiteSettingRepository) FindAll() ([]models.WebsiteSetting, error) {
 	var settings []models.WebsiteSetting
-	err := r.db.Order("key ASC").Find(&settings).Error
+	err := r.db.Order("`key` ASC").Find(&settings).Error
 	return settings, err
 }
 
