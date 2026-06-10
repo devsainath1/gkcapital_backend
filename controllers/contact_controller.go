@@ -36,6 +36,16 @@ func (ctrl *ContactController) Submit(c *gin.Context) {
 		return
 	}
 
+	if !utils.ValidateName(req.Name) {
+		utils.ErrorResponse(c, http.StatusBadRequest, "Name must contain only letters and spaces")
+		return
+	}
+
+	if !utils.ValidatePhone(req.Phone) {
+		utils.ErrorResponse(c, http.StatusBadRequest, "Phone number must be exactly 10 digits")
+		return
+	}
+
 	inquiry, err := ctrl.contactService.Submit(req)
 	if err != nil {
 		utils.ErrorResponse(c, http.StatusInternalServerError, err.Error())

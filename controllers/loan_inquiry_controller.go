@@ -36,6 +36,21 @@ func (ctrl *LoanInquiryController) Submit(c *gin.Context) {
 		return
 	}
 
+	if !utils.ValidateName(req.FullName) {
+		utils.ErrorResponse(c, http.StatusBadRequest, "Full name must contain only letters and spaces")
+		return
+	}
+
+	if !utils.ValidatePhone(req.Phone) {
+		utils.ErrorResponse(c, http.StatusBadRequest, "Phone number must be exactly 10 digits")
+		return
+	}
+
+	if !utils.ValidateCity(req.City) {
+		utils.ErrorResponse(c, http.StatusBadRequest, "City must contain only letters and spaces")
+		return
+	}
+
 	inquiry, err := ctrl.loanInquiryService.Submit(req)
 	if err != nil {
 		utils.ErrorResponse(c, http.StatusInternalServerError, err.Error())
