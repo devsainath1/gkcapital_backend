@@ -45,9 +45,15 @@ func (ctrl *MediaController) Serve(c *gin.Context) {
 		return
 	}
 
-	// Set caching headers — cache for 30 days
+	etag := fmt.Sprintf(`"%d-%d"`, asset.ID, asset.UpdatedAt.Unix())
 	c.Header("Cache-Control", "public, max-age=2592000, immutable")
-	c.Header("ETag", fmt.Sprintf(`"%d-%d"`, asset.ID, asset.UpdatedAt.Unix()))
+	c.Header("ETag", etag)
+
+	if c.GetHeader("If-None-Match") == etag {
+		c.Status(http.StatusNotModified)
+		return
+	}
+
 	c.Data(http.StatusOK, asset.MimeType, asset.Data)
 }
 
@@ -74,7 +80,7 @@ func (ctrl *MediaController) ServeByName(c *gin.Context) {
 	}
 
 	etag := fmt.Sprintf(`"%d-%d"`, asset.ID, asset.UpdatedAt.Unix())
-	c.Header("Cache-Control", "no-cache")
+	c.Header("Cache-Control", "public, max-age=3600, stale-while-revalidate=86400")
 	c.Header("ETag", etag)
 
 	if c.GetHeader("If-None-Match") == etag {
