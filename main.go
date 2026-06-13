@@ -166,7 +166,6 @@ func seedData() {
 		log.Println("Seeded manager user: manager@gkcapital.com / manager123")
 	}
 
-
 	// Seed or update Homepage sections
 	homepageSections := []models.HomepageSection{
 		{
@@ -293,7 +292,7 @@ func seedData() {
 		{
 			Title:       "CGTMSE Loan",
 			Slug:        "cgtmse-loan",
-			Description: "Collateral-free credit facility up to ₹5 Crores for micro and small enterprises, backed by the government's Credit Guarantee Fund Trust for Micro and Small Enterprises (CGTMSE).",
+			Description: "Collateral-free credit facility up to ₹10 Crores for micro and small enterprises, backed by the government's Credit Guarantee Fund Trust for Micro and Small Enterprises (CGTMSE).",
 			Image:       "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
 			Icon:        "Shield",
 			IsActive:    true,
@@ -302,7 +301,7 @@ func seedData() {
 		{
 			Title:       "CC & OD",
 			Slug:        "cc-od-facility",
-			Description: "Cash Credit and Overdraft facilities against inventory, assets, or receivables for flexible, on-demand working capital to manage short-term cash flow gaps efficiently.",
+			Description: "Cash Credit and Overdraft Facilities Collateral-free working capital solutions offering flexible, on-demand funding to manage short-term cash flow needs and business expenses efficiently.",
 			Image:       "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80",
 			Icon:        "Briefcase",
 			IsActive:    true,
@@ -320,7 +319,7 @@ func seedData() {
 		{
 			Title:       "Mudra Loan",
 			Slug:        "mudra-loan",
-			Description: "Government-backed Pradhan Mantri Mudra Yojana (PMMY) loans up to ₹10 Lakhs under Shishu, Kishore, and Tarun categories to fuel micro-enterprise growth and self-employment.",
+			Description: "Government-backed Pradhan Mantri Mudra Yojana (PMMY) loans up to ₹20 Lakhs under Shishu, Kishore, and Tarun categories to fuel micro-enterprise growth and self-employment.",
 			Image:       "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=800&q=80",
 			Icon:        "Award",
 			IsActive:    true,
